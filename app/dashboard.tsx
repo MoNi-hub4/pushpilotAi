@@ -82,13 +82,14 @@ export default function Dashboard() {
       setLoading(false);
     }
   }
+  const formFields = ["keyword", "promo", "category", "brand", "tone"] as const;
 
   return (
     <div className="p-8 max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">PN Generator</h1>
 
       <div className="grid gap-4 mb-6">
-        {["keyword", "promo", "category", "brand", "tone"].map((field) => (
+        {formFields.map((field) => (
           <input
             key={field}
             placeholder={field}
@@ -152,7 +153,7 @@ export default function Dashboard() {
           <tbody>
             {savedResults.length === 0 ? (
               <tr>
-                <td className="p-4 text-gray-500" colSpan="8">
+                <td className="p-4 text-gray-500" colSpan={8}>
                   no saved results yet
                 </td>
               </tr>
@@ -232,7 +233,11 @@ export default function Dashboard() {
               return (
                 <button
                   key={page}
-                  onClick={() => setCurrentPage(page)}
+                  onClick={() => {
+                    if (typeof page === "number") {
+                      setCurrentPage(page);
+                    }
+                  }}
                   className={`px-3 py-1 rounded border ${
                     currentPage === page
                       ? "bg-purple-600 text-white"
