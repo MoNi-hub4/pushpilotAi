@@ -2,6 +2,19 @@
 
 import { useEffect, useState } from "react";
 
+type PN = {
+  _id: string;
+  keyword: string;
+  promo: string;
+  category: string;
+  tone?: string;
+  brand?: string;
+  header: string;
+  body: string;
+  reason?: string;
+  createdAt: string;
+};
+
 export default function Dashboard() {
   const [form, setForm] = useState({
     keyword: "",
@@ -11,8 +24,8 @@ export default function Dashboard() {
     brand: "",
   });
 
-  const [results, setResults] = useState([]);
-  const [savedResults, setSavedResults] = useState([]);
+  const [results, setResults] = useState<PN[]>([]);
+  const [savedResults, setSavedResults] = useState<PN[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -63,8 +76,8 @@ export default function Dashboard() {
       setResults(data.data);
       setSavedResults((prev) => [...data.data, ...prev]);
       setCurrentPage(1);
-    } catch (err) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "something went wrong");
     } finally {
       setLoading(false);
     }
