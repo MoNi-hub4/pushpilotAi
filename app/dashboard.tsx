@@ -169,7 +169,22 @@ export default function Dashboard() {
                   <td className="p-3 font-medium">{pn.header}</td>
                   <td className="p-3">{pn.body}</td>
                   <td className="p-3">{pn.brand || "-"}</td>
-                  <td className="p-3 text-gray-500">{pn.reason}</td>
+                  <td className="p-3 text-gray-500 max-w-[180px] md:max-w-none">
+                    <details className="md:hidden">
+                      <summary className="cursor-pointer list-none">
+                        <span className="inline-block max-w-[150px] truncate align-middle">
+                          {pn.reason}
+                        </span>
+                        <span className="ml-1">⌄</span>
+                      </summary>
+
+                      <p className="mt-2 whitespace-normal break-words">
+                        {pn.reason}
+                      </p>
+                    </details>
+
+                    <span className="hidden md:block">{pn.reason}</span>
+                  </td>
                 </tr>
               ))
             )}
