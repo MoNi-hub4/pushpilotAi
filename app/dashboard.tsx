@@ -169,7 +169,9 @@ export default function Dashboard() {
                   <td className="p-3 font-medium">{pn.header}</td>
                   <td className="p-3">{pn.body}</td>
                   <td className="p-3">{pn.brand || "-"}</td>
-                  <td className="p-3 text-gray-500">{pn.reason}</td>
+                  <td className="p-3 text-gray-500 max-w-[180px] md:max-w-[260px] break-words whitespace-normal text-xs md:text-sm">
+                    {pn.reason}
+                  </td>
                 </tr>
               ))
             )}
