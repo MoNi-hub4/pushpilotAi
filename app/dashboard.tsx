@@ -28,13 +28,26 @@ export default function Dashboard() {
   const [savedResults, setSavedResults] = useState<PN[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const totalPages = Math.ceil(savedResults.length / itemsPerPage);
+  const filteredResults = savedResults.filter((pn) => {
+    const query = searchQuery.trim().toLowerCase();
 
-  const paginatedResults = savedResults.slice(
+    if (!query) return true;
+
+    return (
+      pn.header?.toLowerCase().includes(query) ||
+      pn.body?.toLowerCase().includes(query) ||
+      pn.brand?.toLowerCase().includes(query)
+    );
+  });
+
+  const totalPages = Math.ceil(filteredResults.length / itemsPerPage);
+
+  const paginatedResults = filteredResults.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage,
   );
@@ -134,6 +147,16 @@ export default function Dashboard() {
       </div>
 
       <h2 className="text-xl font-bold mb-4">saved generated results</h2>
+      <input
+        type="text"
+        placeholder="search..."
+        className="mb-4 w-full border p-3 rounded"
+        value={searchQuery}
+        onChange={(e) => {
+          setSearchQuery(e.target.value);
+          setCurrentPage(1);
+        }}
+      />
 
       <div className="overflow-x-auto border rounded">
         <table className="w-full text-sm">
@@ -151,7 +174,7 @@ export default function Dashboard() {
           </thead>
 
           <tbody>
-            {savedResults.length === 0 ? (
+            {filteredResults.length === 0 ? (
               <tr>
                 <td className="p-4 text-gray-500" colSpan={8}>
                   no saved results yet
