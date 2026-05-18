@@ -29,7 +29,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
+  const [expandedReasonId, setExpandedReasonId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -146,7 +146,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <h2 className="text-xl font-bold mb-4">saved generated results</h2>
+      <h2 className="text-xl font-bold mb-4">Generated Push Notifications</h2>
       <input
         type="text"
         placeholder="search..."
@@ -192,21 +192,32 @@ export default function Dashboard() {
                   <td className="p-3 font-medium">{pn.header}</td>
                   <td className="p-3">{pn.body}</td>
                   <td className="p-3">{pn.brand || "-"}</td>
-                  <td className="p-3 text-gray-500 max-w-[180px] md:max-w-none">
-                    <details className="md:hidden">
-                      <summary className="cursor-pointer list-none">
-                        <span className="inline-block max-w-[150px] truncate align-middle">
-                          {pn.reason}
-                        </span>
-                        <span className="ml-1">⌄</span>
-                      </summary>
+                  <td className="p-3 text-gray-500 min-w-[320px] max-w-[420px] align-top">
+                    <p
+                      className={
+                        expandedReasonId === pn._id
+                          ? "whitespace-normal break-words"
+                          : "overflow-hidden text-ellipsis [display:-webkit-box] [-webkit-line-clamp:3] [-webkit-box-orient:vertical]"
+                      }
+                    >
+                      {pn.reason}
+                    </p>
 
-                      <p className="mt-2 whitespace-normal break-words">
-                        {pn.reason}
-                      </p>
-                    </details>
-
-                    <span className="hidden md:block">{pn.reason}</span>
+                    {pn.reason && pn.reason.length > 80 && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setExpandedReasonId(
+                            expandedReasonId === pn._id ? null : pn._id,
+                          )
+                        }
+                        className="mt-1 text-xs text-purple-600 cursor-pointer"
+                      >
+                        {expandedReasonId === pn._id
+                          ? "view less ↑"
+                          : "view more ↓"}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))
